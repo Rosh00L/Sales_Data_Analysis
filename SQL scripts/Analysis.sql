@@ -84,6 +84,15 @@ order by VAT_sum desc
 ; 
 
 -- 10. Which branch sold more products than average product sold?
+select
+Branch,
+avg(`Product line`) as prod_avg 
+from sales
+group by Branch
+order by prod_avg
+; 
+
+
 
 -- 11. What is the most common product line by gender?
 
