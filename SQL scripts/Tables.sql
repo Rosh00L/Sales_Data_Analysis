@@ -3,6 +3,7 @@ use salesdata;
 alter table ref_sales 
 modify `Invoice ID` Varchar(11),
 add column Date_ Varchar(10),
+-- add column Orderdate int,
 add column Time_ Varchar(10),
 add column month int,
 add column month_name varchar(15),
@@ -21,6 +22,7 @@ add column monthOrd int
 update ref_sales 
 set
 Date_=str_to_date(Date,'%d/%m/%Y'),
+-- Orderdate=DATE_FORMAT(date_, '%d-%b-%y'),
 Time_=time_format(Time,"%T"),
 month_name= monthname(date_),
 month= month(date_),
@@ -177,8 +179,6 @@ Day_ID
 from ref_sales ;  
 alter table Daytime
 add primary Key (DAY_ID);
-
-
 
 drop table if exists Payment;
 create table Payment as 
