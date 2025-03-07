@@ -2,31 +2,23 @@ use salesdata;
 
 alter table ref_sales 
 modify `Invoice ID` Varchar(11),
-modify Payment Varchar(11),
 add column Date_ Varchar(10),
 add column Time_ Varchar(10),
--- add column month int,
--- add column month_name varchar(15),
 add column day_name varchar(10),
 add column Day_time varchar(15),
--- add column WeekDay int,
 add column Gender_ID varchar (1),
 add column Productl_ID varchar(5),
 add column Day_ID varchar(4),
 add column Payment_ID varchar(5),
 add column cityCode varchar(3),
 add column Cust_type_id int
--- add column monthOrd int
 ;
 
 update ref_sales 
 set
 Date_=str_to_date(Date,'%d/%m/%Y'),
 Time_=time_format(Time,"%T"),
--- month_name= monthname(date_),
--- month= month(date_),
 day_name= dayname(date_),
--- WeekDay=dayofweek(date_), 
 cityCode=(
 Case
 when City='Old Kent Road' then "SE1"
@@ -82,7 +74,6 @@ when Day_time='Afternoon' then "200A"
 when Day_time='Evening' then "300E"
 end
 )
--- monthOrd=concat(month,"",weekDay)
 ;
 
 alter table ref_sales 
@@ -100,8 +91,8 @@ alter table ref_sales
     modify column Payment varchar(50) not null
    ; 
 
-/*-------------------------------------*/ 
-/*     Tables   */ 
+/* ######## Dimension tables ######## */ 
+/*--------------------------------*/ 
 drop table if exists city; 
 create table city as
 select 
@@ -166,6 +157,7 @@ from ref_sales ;
 alter table Payment
 add primary Key (Payment_ID);
 
+/*---------------Fact Table----------------------*/
 drop table if exists sales;
 create table sales as
 select
@@ -190,12 +182,13 @@ Day_ID
 from ref_sales 
 ;
 
+/*----------- Adding primary foreign Keys --------------------------*/
 alter table sales
 add primary Key (`Invoice ID`),
-ADD FOREIGN KEY (Cust_type_id) REFERENCES customer(Cust_type_id),
-ADD FOREIGN KEY (Gender_ID) REFERENCES gender(Gender_ID),
-ADD FOREIGN KEY (Productl_ID) REFERENCES product(Productl_ID),
-ADD FOREIGN KEY (Payment_ID) REFERENCES payment(Payment_ID),
-ADD FOREIGN KEY (Day_ID) REFERENCES daytime(Day_ID)
+add foreign key (Cust_type_id) references customer(Cust_type_id),
+add foreign key (Gender_ID) references gender(Gender_ID),
+add foreign key (Productl_ID) references product(Productl_ID),
+add foreign key (Payment_ID) references payment(Payment_ID),
+add foreign key (Day_ID) references daytime(Day_ID)
 ;
 
