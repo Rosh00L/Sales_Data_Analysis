@@ -5,7 +5,7 @@ create table ref_sales as
 Select *
 from storedata;
 
-/* ######## Modify source table for Fact table  creation ######## */
+/* ######## Modifing source table for Fact table  creation ######## */
 
 alter table ref_sales 
 modify `Invoice ID` Varchar(11),
