@@ -22,8 +22,8 @@ if not database_exists(engine.url): create_database(engine.url)
 
 # Execute the DROP TABLE statement directly
 with engine.connect() as conn:
-    conn.execute(text("DROP TABLE IF EXISTS ref_sales"))
+    conn.execute(text("DROP TABLE IF EXISTS storedata"))
 
 
 # Convert dataframe to sql table 
-sales.to_sql('ref_sales', engine, if_exists='replace', index=False)
+sales.to_sql('storedata', engine, if_exists='replace', index=False)

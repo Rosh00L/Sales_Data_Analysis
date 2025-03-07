@@ -1,5 +1,12 @@
 use salesdata;
 
+drop table if exists ref_sales;
+create table ref_sales as
+Select *
+from storedata;
+
+/* ######## Modify source table for Fact table  creation ######## */
+
 alter table ref_sales 
 modify `Invoice ID` Varchar(11),
 add column Date_ Varchar(10),
@@ -91,6 +98,31 @@ alter table ref_sales
     modify column Payment varchar(50) not null
    ; 
 
+/* ######## Fact Table ######## */
+drop table if exists sales;
+create table sales as
+select
+`Invoice ID`,
+Branch,
+cityCode,
+Cust_type_id,
+Gender_ID,
+Productl_ID,
+`Unit price`,
+Quantity,
+`Tax 5%`,
+Total,
+Payment_ID,
+cogs,
+`gross margin percentage`,
+`gross income`,
+Rating,
+Date,
+Time,
+Day_ID
+from ref_sales 
+;
+
 /* ######## Dimension tables ######## */ 
 /*--------------------------------*/ 
 drop table if exists city; 
@@ -157,31 +189,6 @@ from ref_sales ;
 alter table Payment
 add primary Key (Payment_ID);
 
-/*---------------Fact Table----------------------*/
-drop table if exists sales;
-create table sales as
-select
-`Invoice ID`,
-Branch,
-cityCode,
-Cust_type_id,
-Gender_ID,
-Productl_ID,
-`Unit price`,
-Quantity,
-`Tax 5%`,
-Total,
-Payment_ID,
-cogs,
-`gross margin percentage`,
-`gross income`,
-Rating,
-Date,
-Time,
-Day_ID
-from ref_sales 
-;
-
 /*----------- Adding primary foreign Keys --------------------------*/
 alter table sales
 add primary Key (`Invoice ID`),
@@ -191,4 +198,5 @@ add foreign key (Productl_ID) references product(Productl_ID),
 add foreign key (Payment_ID) references payment(Payment_ID),
 add foreign key (Day_ID) references daytime(Day_ID)
 ;
+
 
